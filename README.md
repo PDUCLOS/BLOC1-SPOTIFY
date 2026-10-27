@@ -22,3 +22,17 @@ Plan de gouvernance des données de Spotify, présenté au Comité exécutif par
 - 4 piliers : conformité, sécurité, qualité, responsabilité
 - Pilote Marketing de 6 mois, puis 3 vagues de déploiement
 - Indicateurs : qualité ≥ 95 % sur les données critiques, 100 % des demandes d'accès dans les délais, 80 % d'adoption du catalogue
+
+## Démonstrateur exécutable et audit des livrables
+
+Ajouts postérieurs à la remise au jury (les six livrables ci-dessus ne sont pas modifiés).
+
+- `gouvernance/` : la politique traduite en 21 contrôles SQL (DuckDB) — qualité sur les 4 dimensions, RGPD / CCPA, catalogue — exécutés sur des **données 100 % synthétiques**, avant et après remédiation. Rapport : `docs/demo/rapport.html`.
+- `gouvernance/audit_livrables.py` : relit les fichiers Word et PowerPoint et recalcule maturité, budget et décomptes. Il signale notamment que la moyenne de maturité du document d'évaluation est **2,33** (21/9), alors que la présentation annonce 2,4 (moyenne du graphique de la slide 3, dont 6 notes sur 9 diffèrent du document).
+- `docs/index.html` : vitrine (GitHub Pages) ; `docs/architecture.drawio` : 4 schémas ; `docs/video/` : vidéo de présentation ; `docs/PORTFOLIO.md` : faits vérifiés et limites.
+
+```bash
+python -m pip install -r requirements.txt
+python -m gouvernance        # contrôles + audit -> docs/demo/
+python -m pytest             # 40 tests
+```
