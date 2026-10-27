@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gouvernance des données Spotify</title>
+<meta name="description" content="Cas Spotify (Bloc 1 RNCP 38777) : diagnostic de maturité, organisation, politique, plan de déploiement et budget, plus un démonstrateur exécutable de contrôles qualité et RGPD et un audit chiffré des livrables.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Même gabarit que la vitrine de référence (colonne de 1080 px, héros sombre) ;
+   identité reprise des livrables : vert de la politique, noir du sponsor, violet du comité. */
+:root {
+  --bg: #f4f6f4; --surface: #ffffff; --ink: #141a16; --muted: #56615a; --line: #dbe2dd;
+  --accent: #12803f; --accent-ink: #ffffff; --accent-soft: #e2f4e8;
+  --violet: #6a3df0; --violet-soft: #ece6ff;
+  --good: #12803f; --good-soft: #dff2e7; --warn: #8f5d00; --warn-soft: #fbefd6; --bad: #b0261c; --bad-soft: #fbe2df;
+  --hero: #121614; --hero-ink: #ecf1ee; --hero-muted: #a5b3ab; --hero-accent: #4ade80;
+  --code-bg: #0f1411; --code-ink: #dfe8e2;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d110f; --surface: #151b18; --ink: #e5ebe7; --muted: #9caaa2; --line: #26302b;
+  --accent: #4ade80; --accent-ink: #0d110f; --accent-soft: #15301f; --violet: #a68bff; --violet-soft: #241c45;
+  --good: #4ade80; --good-soft: #133021; --warn: #e3a948; --warn-soft: #33270f; --bad: #f08079; --bad-soft: #3a1a18;
+  --hero: #0a0d0b; --code-bg: #090c0a; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0d110f; --surface: #151b18; --ink: #e5ebe7; --muted: #9caaa2; --line: #26302b;
+  --accent: #4ade80; --accent-ink: #0d110f; --accent-soft: #15301f; --violet: #a68bff; --violet-soft: #241c45;
+  --good: #4ade80; --good-soft: #133021; --warn: #e3a948; --warn-soft: #33270f; --bad: #f08079; --bad-soft: #3a1a18;
+  --hero: #0a0d0b; --code-bg: #090c0a; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.62 var(--f-body); }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent); text-underline-offset: 3px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.6rem, 3.2vw, 2.1rem); font-weight: 600; line-height: 1.15; }
+h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.3; }
+p { margin: 0; }
+code { font-family: var(--f-mono); font-size: 0.86em; background: var(--accent-soft); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font: 500 0.74rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.lead { font-size: 1.08rem; color: var(--muted); max-width: 70ch; }
+.muted { color: var(--muted); }
+section { padding-block: 72px 8px; }
+section > .wrap { display: grid; gap: 22px; }
+
+nav.top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--hero) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+nav.top .wrap { display: flex; align-items: center; gap: 18px; min-height: 52px; overflow-x: auto; scrollbar-width: none; }
+nav.top .brand { font: 600 1rem var(--f-display); color: var(--hero-ink); white-space: nowrap; text-decoration: none; }
+nav.top a.l { color: var(--hero-muted); text-decoration: none; font-size: 0.88rem; white-space: nowrap; }
+nav.top a.l:hover, nav.top a.l:focus-visible { color: var(--hero-ink); }
+nav.top .gh { margin-left: auto; color: var(--hero-ink); border: 1px solid rgba(255,255,255,0.25); padding: 4px 12px; border-radius: 4px; font-size: 0.85rem; text-decoration: none; white-space: nowrap; }
+
+.hero { background: var(--hero); color: var(--hero-ink); padding-block: 64px 56px; }
+.hero .wrap { display: grid; gap: 28px; }
+.hero h1 { font-size: clamp(2.1rem, 5.4vw, 3.6rem); font-weight: 700; line-height: 1.04; max-width: 20ch; }
+.hero h1 em { font-style: normal; color: var(--hero-accent); }
+.hero .lead { color: var(--hero-muted); font-size: 1.15rem; }
+.hero .eyebrow { color: var(--hero-muted); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; overflow: hidden; }
+.kpi { background: var(--hero); padding: 16px 18px; display: grid; gap: 2px; }
+.kpi b { font: 600 1.8rem var(--f-display); font-variant-numeric: tabular-nums; color: #fff; }
+.kpi span { font-size: 0.82rem; color: var(--hero-muted); }
+.shot { border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 24px 60px rgba(0,0,0,0.35); }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.95rem; }
+.btn.primary { background: var(--hero-accent); color: #0a1a10; }
+.btn.ghost { border: 1px solid rgba(255,255,255,0.3); color: var(--hero-ink); }
+
+.duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.card ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+figure { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-width: 0; }
+figure img { border-radius: 6px; border: 1px solid var(--line); background: #fff; }
+figcaption { font-size: 0.9rem; color: var(--muted); }
+figcaption b { color: var(--ink); }
+
+.steps { display: grid; gap: 14px; counter-reset: step; }
+.step { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; }
+.step::before { counter-increment: step; content: counter(step); font: 600 1.6rem var(--f-display); color: var(--accent); background: var(--accent-soft); border-radius: 6px; height: 56px; display: grid; place-items: center; }
+.step .body { display: grid; gap: 10px; min-width: 0; }
+.step dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0; font-size: 0.94rem; }
+.step dt { font: 500 0.72rem var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.step dd { margin: 0; }
+@media (max-width: 560px) { .step { grid-template-columns: 1fr; } .step::before { width: 44px; height: 44px; font-size: 1.2rem; } .step dl { grid-template-columns: 1fr; } }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs button { font: 500 0.88rem var(--f-body); padding: 7px 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 4px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.tabs button:focus-visible, .copy:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.diagram { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px; overflow-x: auto; }
+.diagram img { min-width: 760px; }
+
+.scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 500; font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.pill { font: 500 0.72rem var(--f-mono); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+
+.loop { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.loop .card { border-top: 3px solid var(--accent); }
+.loop .card:nth-child(2) { border-top-color: var(--violet); }
+.loop .card:nth-child(3) { border-top-color: var(--warn); }
+.loop .card:nth-child(4) { border-top-color: var(--bad); }
+
+.journal { display: grid; gap: 0; border-left: 2px solid var(--line); margin-left: 8px; }
+.entry { position: relative; padding: 0 0 22px 26px; display: grid; gap: 4px; }
+.entry::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
+.entry.fix::before { border-color: var(--warn); }
+.entry .tag { font: 500 0.72rem var(--f-mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+
+.code { position: relative; background: var(--code-bg); color: var(--code-ink); border-radius: 8px; min-width: 0; }
+.code pre { margin: 0; padding: 16px 18px; overflow-x: auto; font: 0.85rem/1.6 var(--f-mono); }
+.code pre .c { color: #8aa396; }
+.copy { position: absolute; top: 8px; right: 8px; font: 500 0.75rem var(--f-mono); background: rgba(255,255,255,0.08); color: var(--code-ink); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; padding: 3px 8px; cursor: pointer; }
+.callout { border: 1px solid var(--line); border-left: 4px solid var(--warn); background: var(--surface); border-radius: 6px; padding: 14px 16px; display: grid; gap: 6px; }
+.callout.ok { border-left-color: var(--good); }
+dl.gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin: 0; }
+dl.gloss div { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+dl.gloss dt { font: 600 1rem var(--f-display); }
+dl.gloss dd { margin: 4px 0 0; color: var(--muted); font-size: 0.94rem; }
+footer { margin-top: 72px; padding-block: 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+</style>
+</head>
+<body>
+<nav class="top" aria-label="Sommaire">
+  <div class="wrap">
+    <a class="brand" href="#top">Gouvernance Spotify</a>
+    <a class="l" href="#video">Vidéo</a>
+    <a class="l" href="#probleme">Problème</a>
+    <a class="l" href="#livrables">Livrables</a>
+    <a class="l" href="#demarche-conseil">Démarche</a>
+    <a class="l" href="#architecture">Schémas</a>
+    <a class="l" href="#demonstrateur">Démonstrateur</a>
+    <a class="l" href="#audit">Audit</a>
+    <a class="l" href="#journal">Journal</a>
+    <a class="l" href="#limites">Limites</a>
+    <a class="gh" href="https://github.com/PDUCLOS/BLOC1-SPOTIFY">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow">Data Governance · conseil auprès d'un comité exécutif · Bloc 1 RNCP 38777</span>
+    <h1>Gouvernance des données : <em>du diagnostic au plan d'action</em>, puis à la preuve.</h1>
+    <p class="lead">Cas d'étude Spotify (450 M d'utilisateurs, 180 pays) : un Chief Data Officer présente au comité exécutif un diagnostic de maturité, une organisation, une politique, un plan de déploiement chiffré. Ce dépôt ajoute ce qu'un comité ne voit pas d'habitude : les règles de la politique exécutées en SQL sur un jeu de données d'exemple, et un audit chiffré des livrables eux-mêmes.</p>
+    <div class="kpis" role="list">
+      <div class="kpi" role="listitem"><b>6</b><span>livrables : évaluation, organigramme, note, politique, plan, présentation</span></div>
+      <div class="kpi" role="listitem"><b>21</b><span>contrôles exécutables : qualité, RGPD / CCPA, catalogue</span></div>
+      <div class="kpi" role="listitem"><b>12 → 18</b><span>contrôles conformes avant / après remédiation</span></div>
+      <div class="kpi" role="listitem"><b>1,4 s</b><span>pour contrôler 501 513 événements (DuckDB)</span></div>
+      <div class="kpi" role="listitem"><b>5</b><span>points relevés par l'audit des livrables, dont 3 écarts chiffrés</span></div>
+    </div>
+    <div class="shot"><img src="img/livrables/slide-06.png" alt="Slide 6 de la présentation au comité exécutif : organigramme de la gouvernance, du sponsor CEO/COO aux quatre Data Stewards" width="1440" height="810"></div>
+    <div class="cta">
+      <a class="btn primary" href="#demonstrateur">Voir le démonstrateur</a>
+      <a class="btn ghost" href="https://github.com/PDUCLOS/BLOC1-SPOTIFY">Les livrables sur GitHub</a>
+      <a class="btn ghost" href="demo/rapport.html">Rapport des contrôles</a>
+    </div>
+  </div>
+</header>
+
+<section id="video">
+  <div class="wrap">
+    <span class="eyebrow">En deux minutes</span>
+    <h2>Le projet en vidéo</h2>
+    <video controls preload="metadata" poster="video/poster.png" style="width:100%;border-radius:8px;border:1px solid var(--line);background:#121614">
+      <source src="video/gouvernance-spotify-promo.mp4" type="video/mp4">
+      Votre navigateur ne lit pas la vidéo : <a href="video/gouvernance-spotify-promo.mp4">la télécharger</a>.
+    </video>
+    <p class="muted">Vidéo générée par <code>scripts/promo_video.py</code> à partir des vraies pages des livrables et du rapport : narration de synthèse, fond sonore synthétisé.</p>
+  </div>
+</section>
+
+<section id="probleme">
+  <div class="wrap">
+    <span class="eyebrow">Le problème</span>
+    <h2>Des données en silos, une exposition réglementaire mondiale</h2>
+    <div class="duo">
+      <div class="card">
+        <h3>Ce que dit le business case</h3>
+        <ul>
+          <li>Marketing, produit, contenu et engineering gèrent chacun leurs données : plusieurs vues d'un même utilisateur.</li>
+          <li>Le moteur de recommandation dépend de la qualité de ces données.</li>
+          <li>RGPD, CCPA, PDPA : jusqu'à 20 M€ ou 4 % du chiffre d'affaires mondial, violation notifiée sous 72 h.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Ce que le comité doit décider</h3>
+        <ul>
+          <li>Approuver un cadre : politique, principes, organigramme.</li>
+          <li>Financer un pilote de 6 mois : ≈ 350–560 K$ de licences et d'intégration, plus 4 à 6 ETP.</li>
+          <li>Lancer le pilote sur les données d'engagement du Marketing, sous 30 jours.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Ce que ce dépôt ajoute</h3>
+        <ul>
+          <li><b>Règles exécutables</b> : la politique devient 21 contrôles SQL, mesurés avant et après correction.</li>
+          <li><b>Honnêteté du chiffre</b> : un audit automatique relit les livrables et trouve leurs incohérences.</li>
+          <li><b>Lisibilité</b> : quatre schémas draw.io, organisation, flux, calendrier, démonstrateur.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Cas d'étude pédagogique fondé sur un business case fourni par la formation : les chiffres de Spotify sont ceux du cas, pas d'une mission réelle.</p>
+  </div>
+</section>
+
+<section id="livrables">
+  <div class="wrap">
+    <span class="eyebrow">Les livrables</span>
+    <h2>Pages réelles des documents remis au jury</h2>
+    <p class="lead">Ces images sont exportées des fichiers du dépôt par PowerPoint et Word, sans retouche. Elles montrent ce que le comité exécutif aurait sous les yeux.</p>
+    <div class="gallery">
+      <figure>
+        <img src="img/livrables/slide-03.png" alt="Slide 3 : graphique des notes de maturité sur 9 dimensions et moyenne 2,4 sur 5" width="1440" height="810" loading="lazy">
+        <figcaption><b>Diagnostic de maturité (slide 3).</b> Neuf dimensions notées de 1 à 5. L'<a href="#audit">audit</a> montre que ces notes ne sont pas celles du document d'évaluation.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/livrables/organigramme.png" alt="Organigramme de la gouvernance : direction exécutive, CDO, comité, DPO, RSSI, juridique, quatre Data Stewards" width="1871" height="1323" loading="lazy">
+        <figcaption><b>Organigramme (02a).</b> Sponsor exécutif, CDO pilote, comité transverse, trois fonctions sous le CDO et quatre Data Stewards par domaine.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/livrables/politique-classification.png" alt="Tableau de classification des données en quatre niveaux : public, interne, confidentiel, restreint" width="1241" height="580" loading="lazy">
+        <figcaption><b>Classification (politique 02c §3).</b> Quatre niveaux, chacun avec ses contrôles. Le catalogue du démonstrateur applique cette grille.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/livrables/slide-10.png" alt="Slide 10 : plan de déploiement, pilote puis trois vagues sur 18 mois, et cinq KPIs cibles" width="1440" height="810" loading="lazy">
+        <figcaption><b>Plan de déploiement (slide 10).</b> Pilote Marketing M0–M6, trois vagues jusqu'à M18, cinq indicateurs cibles.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/livrables/plan-budget.png" alt="Annexe budgétaire du plan : sept postes de licences, intégration, total pilote 350 à 560 K$" width="1241" height="1754" loading="lazy">
+        <figcaption><b>Budget (plan 03, annexe A).</b> Sept postes sourcés (éditeurs, Vendr). Les sous-totaux sont justes ; la ligne d'intégration ne l'est qu'à moitié.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/livrables/slide-14.png" alt="Slide 14 : décision demandée au comité, approuver le cadre, sécuriser le budget pilote, lancer le pilote" width="1440" height="810" loading="lazy">
+        <figcaption><b>Décision demandée (slide 14).</b> Trois décisions, un budget, un délai de lancement.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="demarche-conseil">
+  <div class="wrap">
+    <span class="eyebrow">La démarche de conseil</span>
+    <h2>Cinq livrables, une logique : constater, organiser, régler, déployer, convaincre</h2>
+    <div class="steps">
+      <article class="step"><div class="body">
+        <h3>Évaluer la maturité</h3>
+        <dl>
+          <dt>En clair</dt><dd>Neuf dimensions (gouvernance, qualité, architecture, conformité, usage, sécurité, literacy, intégration, analytics) notées sur une échelle définie : inexistant, identifié, cadré, en déploiement, opérationnel.</dd>
+          <dt>Fichier</dt><dd><code>01_Evaluation_Maturite_Data.docx</code></dd>
+          <dt>Pourquoi</dt><dd>On ne priorise pas sans point de départ. Le document conclut : un projet bien posé, pas une organisation mature ; commencer par activer les rôles, lancer un pilote, sécuriser la conformité.</dd>
+        </dl>
+      </div></article>
+      <article class="step"><div class="body">
+        <h3>Organiser : qui décide, qui répond</h3>
+        <dl>
+          <dt>En clair</dt><dd>Un sponsor exécutif, un CDO pilote, un comité transverse, un DPO, un RSSI, un juridique et un Data Steward par domaine (Marketing, Produit, Finance, Paiement).</dd>
+          <dt>Fichiers</dt><dd><code>02a_Organigramme_Gouvernance.pdf</code> · <code>02b_Note_Argumentation_Organigramme.docx</code></dd>
+          <dt>Pourquoi</dt><dd>La note justifie chaque rôle ajouté par un document source, et prépare les réponses aux objections du comité. Les rôles de Data Management restent hors organigramme : la gouvernance fixe les règles et audite.</dd>
+        </dl>
+      </div></article>
+      <article class="step"><div class="body">
+        <h3>Écrire la règle</h3>
+        <dl>
+          <dt>En clair</dt><dd>Neuf principes (responsabilité, transparence, sécurité, qualité, conformité, minimisation, droits, amélioration continue, éthique), quatre niveaux de classification, les exigences RGPD, CCPA et PCI-DSS, sept KPIs.</dd>
+          <dt>Fichier</dt><dd><code>02c_Politique_Gouvernance_Donnees.docx</code></dd>
+          <dt>Pourquoi</dt><dd>Une politique doit être contrôlable. C'est elle que le démonstrateur traduit en requêtes SQL.</dd>
+        </dl>
+      </div></article>
+      <article class="step"><div class="body">
+        <h3>Planifier et chiffrer</h3>
+        <dl>
+          <dt>En clair</dt><dd>Modèle Center of Excellence, outillage (Databricks, Collibra, Talend + dbt, OneTrust, Splunk + Vormetric, MLflow + Evidently), pilote Marketing de 6 mois, trois vagues, risques, budget sourcé.</dd>
+          <dt>Fichier</dt><dd><code>03_Plan_Implementation_Gouvernance.docx</code></dd>
+          <dt>Pourquoi</dt><dd>Un pilote borné réduit le risque : périmètre, équipe, jalons mensuels et cinq KPIs mesurés à M6 avant de généraliser.</dd>
+        </dl>
+      </div></article>
+      <article class="step"><div class="body">
+        <h3>Convaincre le comité</h3>
+        <dl>
+          <dt>En clair</dt><dd>Quatorze slides, quinze minutes : pourquoi maintenant, diagnostic, cadre, organisation, stack, plan, pilote, investissement, décision.</dd>
+          <dt>Fichier</dt><dd><code>04_Presentation_Comite_Executif.pptx</code></dd>
+          <dt>Pourquoi</dt><dd>Un dirigeant décide sur une page. Chaque chiffre doit pouvoir être retrouvé dans un document source : c'est ce que vérifie l'audit plus bas.</dd>
+        </dl>
+      </div></article>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap">
+    <span class="eyebrow">Schémas</span>
+    <h2>Organisation, flux, calendrier, démonstrateur</h2>
+    <p class="lead">Quatre pages draw.io générées par <code>scripts/build_drawio.py</code> à partir du contenu des livrables. Les cadres orange en pointillé sont des annotations de relecture, absentes des livrables.</p>
+    <div class="tabs" role="tablist" id="archTabs">
+      <button type="button" role="tab" id="arch-1" aria-selected="true" data-img="img/architecture-1.png" data-alt="Organisation de la gouvernance">Organisation</button>
+      <button type="button" role="tab" id="arch-2" aria-selected="false" data-img="img/architecture-2.png" data-alt="Flux de données et outillage">Flux et outillage</button>
+      <button type="button" role="tab" id="arch-3" aria-selected="false" data-img="img/architecture-3.png" data-alt="Feuille de route">Feuille de route</button>
+      <button type="button" role="tab" id="arch-4" aria-selected="false" data-img="img/architecture-4.png" data-alt="Démonstrateur exécutable">Démonstrateur</button>
+    </div>
+    <div class="diagram" role="tabpanel" aria-labelledby="arch-1"><img id="archImg" src="img/architecture-1.png" alt="Organisation de la gouvernance" loading="lazy"></div>
+    <p class="muted">Source éditable : <a href="https://github.com/PDUCLOS/BLOC1-SPOTIFY/blob/main/docs/architecture.drawio"><code>docs/architecture.drawio</code></a>.</p>
+  </div>
+</section>
+
+<section id="demonstrateur">
+  <div class="wrap">
+    <span class="eyebrow">Démonstrateur exécutable</span>
+    <h2>La politique, exécutée sur un jeu de données d'exemple</h2>
+    <p class="lead">Le pilote prévoit un audit qualité à M1, un audit RGPD à M2 et une mesure des KPIs à M6. Le démonstrateur rejoue cette boucle en deux secondes, sur des données 100 % synthétiques (5 000 utilisateurs, 50 148 événements, e-mails en <code>@example.com</code>), dans lesquelles 13 types de défauts ont été injectés à des taux connus.</p>
+    <div class="loop">
+      <div class="card"><span class="eyebrow">1 · Mesurer</span><h3>21 contrôles SQL</h3><p class="muted">11 contrôles qualité sur les 4 dimensions de la politique (complétude, exactitude, cohérence, traçabilité), 6 contrôles RGPD / CCPA, 4 contrôles du catalogue.</p></div>
+      <div class="card"><span class="eyebrow">2 · Cataloguer</span><h3>Un responsable par donnée</h3><p class="muted"><code>catalog.toml</code> joue le rôle de Collibra : steward, classification, base légale, rétention. Une colonne téléphone absente du catalogue est détectée.</p></div>
+      <div class="card"><span class="eyebrow">3 · Corriger</span><h3>Remédiation tracée</h3><p class="muted">147 pays complétés depuis les abonnements, 764 événements en quarantaine, 144 doublons, 478 événements purgés au-delà de 24 mois, 29 e-mails pseudonymisés.</p></div>
+      <div class="card"><span class="eyebrow">4 · Ne pas maquiller</span><h3>3 contrôles restent rouges</h3><p class="muted">Année de naissance manquante, DSAR en retard, violations notifiées hors délai : ce sont des défauts de collecte ou de processus. Le code refuse de les « corriger ».</p></div>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>KPI (source)</th><th class="num">Avant</th><th class="num">Après</th><th class="num">Cible</th><th>Statut</th></tr></thead>
+        <tbody>
+          <tr><td>Score qualité, moyenne des 11 contrôles (politique §6.2)</td><td class="num">98,3 %</td><td class="num">98,7 %</td><td class="num">≥ 95 %</td><td><span class="pill ok">atteint</span></td></tr>
+          <tr><td>Cellules vides sur les colonnes critiques (plan §4.6)</td><td class="num">0,42 %</td><td class="num">0,36 %</td><td class="num">−10 %</td><td><span class="pill ok">−14,9 %</span></td></tr>
+          <tr><td>Consentements tracés (plan §4.6)</td><td class="num">97,9 %</td><td class="num">100,0 %</td><td class="num">100 %</td><td><span class="pill ok">atteint</span></td></tr>
+          <tr><td>DSAR traitées dans les délais légaux (politique §6.2)</td><td class="num">96,5 %</td><td class="num">96,5 %</td><td class="num">100 %</td><td><span class="pill bad">non atteint</span></td></tr>
+          <tr><td>Violations notifiées sous 72 h (RGPD art. 33)</td><td class="num">60,0 %</td><td class="num">60,0 %</td><td class="num">100 %</td><td><span class="pill bad">non atteint</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Ces chiffres mesurent le démonstrateur, pas Spotify : ils dépendent des taux de défauts choisis dans <code>gouvernance/generate.py</code>. Ce qu'ils prouvent : chaque règle est vérifiable, chaque correction est comptée, et ce qui ne se corrige pas par la donnée reste visible. Un consentement sans horodatage est traité comme absent (65 cas) : la charge de la preuve pèse sur l'entreprise (RGPD art. 7-1).</p>
+    <figure>
+      <img src="img/demo-rapport.png" alt="Rapport HTML du démonstrateur : KPIs avant et après, 21 contrôles avec échecs et exemples, remédiation, audit des livrables" width="1280" height="2900" loading="lazy">
+      <figcaption><b>Rapport généré</b> par <code>python -m gouvernance</code> (<a href="demo/rapport.html">version HTML</a>, <a href="demo/rapport.json">JSON</a>). Mesuré sur cette machine (Ryzen 9 3900X) : 0,8 s pour les 21 contrôles, 0,5 s pour remédier et recontrôler. À 50 000 utilisateurs et 501 513 événements : 1,4 s de contrôles, 1,4 s de remédiation et recontrôle.</figcaption>
+    </figure>
+    <div class="code"><button class="copy" type="button">Copier</button><pre><span class="c"># Un contrôle = une requête qui compte les lignes en échec (convention des tests dbt)</span>
+Check("C02", "conformite", "consentement",
+      "Audience de campagne : consentement présent", "RGPD art. 6-1-a et 7",
+      "campaign_audience",
+      "user_id NOT IN (SELECT user_id FROM {s}.users WHERE consent_marketing = 'true' "
+      "AND NOT (consent_ts vide))", threshold=1.0)</pre></div>
+  </div>
+</section>
+
+<section id="audit">
+  <div class="wrap">
+    <span class="eyebrow">Audit des livrables</span>
+    <h2>Relire ses propres chiffres avant le comité</h2>
+    <p class="lead"><code>gouvernance/audit_livrables.py</code> ouvre les fichiers Word et PowerPoint en lecture seule, extrait les notes, le graphique, le tableau budgétaire et les décomptes, puis recalcule. Résultat : 7 points cohérents, 5 à signaler.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Point</th><th>Constat</th><th>Statut</th></tr></thead>
+        <tbody>
+          <tr><td><b>Notes de maturité</b></td><td>6 dimensions sur 9 ont une note différente entre le document d'évaluation et le graphique de la slide 3. Exemples : gouvernance 3 → 2, conformité 3 → 2, Analytics &amp; BI 2 → 4.</td><td><span class="pill bad">écart</span></td></tr>
+          <tr><td><b>Moyenne de maturité</b></td><td>Le document calcule 21 / 9 = 2,33 (« environ 2,3 ») ; la présentation et le README annoncent 2,4, qui est la moyenne du graphique (22 / 9 = 2,44).</td><td><span class="pill bad">écart</span></td></tr>
+          <tr><td><b>Intégration « +30 à 50 % »</b></td><td>La ligne 80–130 K$ applique 30 % aux deux bornes. Avec 30 à 50 %, on obtient 81–215 K$, donc un pilote à 351–645 K$ au lieu de 350–560 K$.</td><td><span class="pill bad">écart</span></td></tr>
+          <tr><td><b>« 14 contrôles de conformité »</b> (slide 5)</td><td>Aucune liste de 14 contrôles ni matrice de conformité (citée slide 14) dans le dépôt. La section 4 de la politique compte 13 rubriques.</td><td><span class="pill warn">non traçable</span></td></tr>
+          <tr><td><b>Calendrier</b></td><td>Le plan finit à M18, la politique à M24 ; la bascule vers le Center of Excellence est en phase 2 (7 à 12 mois) dans la politique, à M12 dans les slides.</td><td><span class="pill warn">à harmoniser</span></td></tr>
+          <tr><td>Sous-totaux licences, total pilote, 9 principes, 4 niveaux, 7 KPIs, 14 slides</td><td>Recalculés ou recomptés : conformes à ce qu'annonce la présentation (270–430 K$ ; 2,145–5,790 M$ arrondi à 2,1–5,8 M$).</td><td><span class="pill ok">cohérent</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="duo">
+      <div class="callout"><h3>Points de vigilance relevés à la lecture</h3>
+        <p class="muted"><b>DPO.</b> La note 02b rattache le DPO au CDO et cite l'article 38 du RGPD, qui demande que le DPO rende compte au niveau le plus élevé de la direction. Assimiler le CDO à ce niveau se discute ; une ligne directe DPO → direction exécutive lèverait le doute.</p>
+        <p class="muted"><b>Délais.</b> La politique écrit « incidents traités sous 72 heures » ; le RGPD impose une <i>notification</i> à l'autorité sous 72 h, pas un traitement. Le délai DSAR RGPD est d'un mois (prolongeable), noté « 30 jours ».</p>
+        <p class="muted"><b>ROI « > 3× »</b> (slide 12) : aucun calcul ne l'accompagne dans le dépôt.</p>
+      </div>
+      <div class="callout ok"><h3>Ce que l'audit ne fait pas</h3>
+        <p class="muted">Il ne juge pas la pertinence des recommandations ni l'exactitude des prix éditeurs (sources externes, non revérifiées ici). Il ne modifie pas les livrables : ce sont les versions remises au jury, laissées intactes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pas-de-k8s">
+  <div class="wrap">
+    <span class="eyebrow">Déploiement</span>
+    <h2>Pourquoi ni Docker ni Kubernetes ici</h2>
+    <div class="prose" style="display:grid;gap:14px;max-width:72ch">
+      <p>Le livrable est un dossier de conseil, et le démonstrateur est un traitement par lots de deux secondes, sans service, sans état ni utilisateur concurrent. Un conteneur ou un manifeste Kubernetes n'apporterait aucune preuve supplémentaire : il ajouterait de la surface à maintenir.</p>
+      <p class="muted">Dans la cible, ces contrôles tourneraient comme des tests dbt planifiés dans Databricks (Workflows), à côté du pipeline qu'ils surveillent, et leurs résultats remonteraient dans Collibra. C'est une recommandation d'architecture, non mise en œuvre.</p>
+    </div>
+  </div>
+</section>
+
+<section id="journal">
+  <div class="wrap">
+    <span class="eyebrow">Démarche</span>
+    <h2>Le journal de la mise en valeur</h2>
+    <div class="journal">
+      <div class="entry"><span class="tag">Lecture</span><h3>Extraction des six livrables</h3><p class="muted">Texte, tableaux et notes des fichiers Word, PowerPoint et PDF lus avec python-docx, python-pptx et PyMuPDF, puis comparés à la fiche du portfolio.</p></div>
+      <div class="entry fix"><span class="tag">Écart</span><h3>Le graphique ne dit pas la même chose que le document</h3><p class="muted">En lisant les données du graphique de la slide 3 (et de la version V4 archivée), 6 notes sur 9 diffèrent du document d'évaluation. La moyenne 2,4 annoncée vient du graphique, pas de l'analyse écrite (2,3).</p></div>
+      <div class="entry"><span class="tag">Captures</span><h3>Pages réelles exportées</h3><p class="muted">Slides exportées par PowerPoint, documents convertis en PDF par Word puis rendus en PNG. Aucun fichier source modifié.</p></div>
+      <div class="entry"><span class="tag">Démonstrateur</span><h3>De la politique au SQL</h3><p class="muted">Catalogue TOML, générateur synthétique, 21 contrôles DuckDB, remédiation avant / après, rapport HTML. 40 tests pytest verts.</p></div>
+      <div class="entry fix"><span class="tag">Correctif · démonstrateur</span><h3>Le contrôle DSAR ne voyait que 2 retards sur 4</h3><p class="muted">Deux demandes « en retard » du générateur avaient une date de clôture future : elles apparaissaient comme en cours. Le générateur fixe maintenant leur réception dans le passé ; un test vérifie les 4 cas.</p></div>
+      <div class="entry fix"><span class="tag">Écart</span><h3>La marge d'intégration</h3><p class="muted">En recalculant l'annexe budgétaire, la ligne « +30 à 50 % » s'avère calculée à 30 % sur les deux bornes. Le haut de fourchette du pilote est sous-estimé de 85 K$.</p></div>
+      <div class="entry"><span class="tag">Livraison</span><h3>Schémas, vitrine, vidéo</h3><p class="muted">Quatre pages draw.io vérifiées à l'export PNG, cette page, une vidéo narrée générée par script.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="glossaire">
+  <div class="wrap">
+    <span class="eyebrow">Glossaire</span>
+    <h2>Les mots du projet</h2>
+    <dl class="gloss">
+      <div><dt>CDO</dt><dd>Chief Data Officer : porte la stratégie data et pilote la gouvernance.</dd></div>
+      <div><dt>DPO</dt><dd>Délégué à la protection des données : veille à la conformité RGPD, interlocuteur de la CNIL, fonctionnellement indépendant.</dd></div>
+      <div><dt>Data Steward</dt><dd>Responsable de la qualité, de l'accès et de la conformité des données d'un domaine métier.</dd></div>
+      <div><dt>Center of Excellence</dt><dd>Modèle fédéré : un noyau central fixe les standards, des équipes data dans les métiers les appliquent.</dd></div>
+      <div><dt>DSAR</dt><dd>Data Subject Access Request : demande d'accès, de rectification ou d'effacement d'un utilisateur sur ses données.</dd></div>
+      <div><dt>Minimisation</dt><dd>Ne collecter et ne garder que ce qui sert une finalité définie, pendant une durée limitée.</dd></div>
+      <div><dt>Pseudonymisation</dt><dd>Remplacer un identifiant direct (e-mail) par une valeur dérivée (ici un hash SHA-256). La donnée reste personnelle au sens du RGPD.</dd></div>
+      <div><dt>Lignage</dt><dd>Trace de l'origine d'une donnée et des transformations subies. Ici : système source et date d'ingestion.</dd></div>
+      <div><dt>Test dbt</dt><dd>Requête SQL qui renvoie les lignes en échec ; zéro ligne, le test passe. Le démonstrateur reprend cette convention.</dd></div>
+      <div><dt>DuckDB</dt><dd>Base analytique embarquée, sans serveur : elle lit des CSV et exécute du SQL en mémoire.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="limites">
+  <div class="wrap">
+    <span class="eyebrow">Limites</span>
+    <h2>Ce qui est prouvé, et ce qui ne l'est pas</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Sujet</th><th>État</th></tr></thead>
+      <tbody>
+        <tr><td>Recommandations (organisation, outils, budget)</td><td>Cas d'étude de certification : <b>non mises en œuvre</b>. Prix éditeurs repris des sources citées, non revérifiés.</td></tr>
+        <tr><td>Démonstrateur</td><td>Données synthétiques ; DuckDB et des requêtes « à la dbt » simulent Databricks, dbt/Talend et Collibra. Aucun de ces outils n'est déployé.</td></tr>
+        <tr><td>Score qualité</td><td>Moyenne des taux de réussite : il reste à 98 % même quand un contrôle (année de naissance) est à 91,7 %. Le détail par contrôle est la vraie lecture.</td></tr>
+        <tr><td>Livrables</td><td>Écarts signalés, <b>pas corrigés</b> dans les fichiers remis au jury.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="lancer">
+  <div class="wrap">
+    <span class="eyebrow">Essayer</span>
+    <h2>Relancer les contrôles et l'audit</h2>
+    <div class="code"><button class="copy" type="button">Copier</button><pre>git clone https://github.com/PDUCLOS/BLOC1-SPOTIFY.git && cd BLOC1-SPOTIFY
+python -m pip install -r requirements.txt
+python -m gouvernance                 <span class="c"># écrit docs/demo/rapport.html et rapport.json</span>
+python -m gouvernance --users 50000   <span class="c"># ~500 000 événements</span>
+python -m pytest                      <span class="c"># 40 tests</span>
+python scripts/build_drawio.py        <span class="c"># régénère les schémas (draw.io requis pour les PNG)</span></pre></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Patrice Duclos · Analytics Engineer · Architecte IA (RNCP 38777)</span>
+    <span><a href="https://github.com/PDUCLOS/BLOC1-SPOTIFY">github.com/PDUCLOS/BLOC1-SPOTIFY</a></span>
+  </div>
+</footer>
+<script>
+const tabs = document.querySelectorAll("#archTabs button");
+const img = document.getElementById("archImg");
+const panel = img.parentElement;
+tabs.forEach(b => b.addEventListener("click", () => {
+  tabs.forEach(t => t.setAttribute("aria-selected", String(t === b)));
+  img.src = b.dataset.img; img.alt = b.dataset.alt; panel.setAttribute("aria-labelledby", b.id);
+}));
+document.querySelectorAll(".copy").forEach(btn => btn.addEventListener("click", () => {
+  const text = btn.nextElementSibling.innerText;
+  const done = () => { btn.textContent = "Copié"; setTimeout(() => (btn.textContent = "Copier"), 1500); };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done).catch(() => select(btn.nextElementSibling));
+  else select(btn.nextElementSibling);
+}));
+function select(el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+</script>
+</body>
+</html>
