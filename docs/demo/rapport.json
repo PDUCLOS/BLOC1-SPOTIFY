@@ -1,0 +1,893 @@
+{
+  "meta": {
+    "genere_le": "2026-10-27 14:35",
+    "graine": 38777,
+    "duckdb": "2.0.0",
+    "python": "3.12.3",
+    "lignes": {
+      "users": 5000,
+      "events": 50148,
+      "campaign_audience": 1250,
+      "subscriptions": 2157,
+      "dsar_requests": 120,
+      "security_incidents": 6
+    },
+    "durees_s": {
+      "generation": 1.3735804999996617,
+      "controles_avant": 0.8173981999998432,
+      "remediation_et_controles_apres": 0.46236730000055104,
+      "audit_livrables": 0.35433329999978014
+    }
+  },
+  "synthese": {
+    "ok_avant": 12,
+    "ok_apres": 18,
+    "total": 21
+  },
+  "kpis_avant": {
+    "score_qualite": 0.982502791672501,
+    "taux_donnees_manquantes": 0.004247303442235473,
+    "consentements_traces": 0.9793059535179879,
+    "dsar_dans_les_delais": 0.9649122807017544,
+    "violations_notifiees_72h": 0.6,
+    "controles_ok": 12,
+    "controles_total": 21
+  },
+  "kpis_apres": {
+    "score_qualite": 0.9874453311259512,
+    "taux_donnees_manquantes": 0.0036127301038275245,
+    "consentements_traces": 1.0,
+    "dsar_dans_les_delais": 0.9649122807017544,
+    "violations_notifiees_72h": 0.6,
+    "controles_ok": 18,
+    "controles_total": 21
+  },
+  "kpis": [
+    {
+      "key": "score_qualite",
+      "label": "Score qualité (moyenne des 11 contrôles qualité)",
+      "before": "98,3 %",
+      "after": "98,7 %",
+      "target": "≥ 95 %",
+      "ref": "Politique §6.2",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "key": "taux_donnees_manquantes",
+      "label": "Cellules vides sur colonnes critiques",
+      "before": "0,42 %",
+      "after": "0,36 %",
+      "target": "−10 % vs avant",
+      "ref": "Plan §4.6",
+      "ok": true,
+      "note": "-14,9 % en relatif"
+    },
+    {
+      "key": "consentements_traces",
+      "label": "Consentements tracés",
+      "before": "97,9 %",
+      "after": "100,0 %",
+      "target": "100 %",
+      "ref": "Plan §4.6",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "key": "dsar_dans_les_delais",
+      "label": "DSAR traitées dans les délais légaux",
+      "before": "96,5 %",
+      "after": "96,5 %",
+      "target": "100 %",
+      "ref": "Politique §6.2",
+      "ok": false,
+      "note": ""
+    },
+    {
+      "key": "violations_notifiees_72h",
+      "label": "Violations notifiées sous 72 h",
+      "before": "60,0 %",
+      "after": "60,0 %",
+      "target": "100 %",
+      "ref": "RGPD art. 33",
+      "ok": false,
+      "note": ""
+    }
+  ],
+  "remediation": {
+    "pays_enrichis_depuis_abonnements": 147,
+    "consentements_sans_preuve_revoques": 65,
+    "evenements_en_quarantaine": 764,
+    "doublons_supprimes": 144,
+    "evenements_purges_retention": 478,
+    "audience_retiree_sans_consentement": 55,
+    "emails_en_clair_pseudonymises": 29,
+    "colonnes_hors_catalogue_supprimees": 1
+  },
+  "controles_avant": [
+    {
+      "id": "Q01",
+      "family": "qualite",
+      "dimension": "completude",
+      "title": "Pays renseigné",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 295,
+      "rate": 0.9410000000000001,
+      "threshold": 0.95,
+      "passed": false,
+      "sample": [
+        "U0000025",
+        "U0000031",
+        "U0000044"
+      ]
+    },
+    {
+      "id": "Q02",
+      "family": "qualite",
+      "dimension": "completude",
+      "title": "Année de naissance renseignée",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 413,
+      "rate": 0.9174,
+      "threshold": 0.95,
+      "passed": false,
+      "sample": [
+        "U0000002",
+        "U0000009",
+        "U0000064"
+      ]
+    },
+    {
+      "id": "Q03",
+      "family": "qualite",
+      "dimension": "completude",
+      "title": "Consentement marketing renseigné",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "Q04",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "E-mail au bon format",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 79,
+      "rate": 0.9842,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "U0000011",
+        "U0000028",
+        "U0000166"
+      ]
+    },
+    {
+      "id": "Q05",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "Pays dans le référentiel ISO",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 4705,
+      "failed": 42,
+      "rate": 0.9910733262486716,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "U0000398",
+        "U0000419",
+        "U0000533"
+      ]
+    },
+    {
+      "id": "Q06",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "Durée d'écoute positive",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 50148,
+      "failed": 258,
+      "rate": 0.9948552285235702,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "E000000407",
+        "E000000411",
+        "E000000453"
+      ]
+    },
+    {
+      "id": "Q07",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "Événement non daté dans le futur",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 50148,
+      "failed": 112,
+      "rate": 0.9977666108319375,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "E000000017",
+        "E000000161",
+        "E000000561"
+      ]
+    },
+    {
+      "id": "Q08",
+      "family": "qualite",
+      "dimension": "coherence",
+      "title": "Événement rattaché à un utilisateur connu",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 50148,
+      "failed": 397,
+      "rate": 0.9920834330382069,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "E000000002",
+        "E000000070",
+        "E000000136"
+      ]
+    },
+    {
+      "id": "Q09",
+      "family": "qualite",
+      "dimension": "coherence",
+      "title": "Identifiant d'événement unique",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 50148,
+      "failed": 296,
+      "rate": 0.9940974714844062,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "E000000002",
+        "E000001084",
+        "E000001172"
+      ]
+    },
+    {
+      "id": "Q10",
+      "family": "qualite",
+      "dimension": "tracabilite",
+      "title": "Lignage des événements (source, ingestion)",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 50148,
+      "failed": 248,
+      "rate": 0.9950546382707187,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "E000000569",
+        "E000000918",
+        "E000001096"
+      ]
+    },
+    {
+      "id": "Q11",
+      "family": "qualite",
+      "dimension": "tracabilite",
+      "title": "Lignage des profils (source, ingestion)",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "C01",
+      "family": "conformite",
+      "dimension": "consentement",
+      "title": "Consentement tracé (horodatage + canal)",
+      "reference": "Plan, KPI pilote « 100 % »",
+      "table": "users",
+      "checked": 3141,
+      "failed": 65,
+      "rate": 0.9793059535179879,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "U0000007",
+        "U0000247",
+        "U0000255"
+      ]
+    },
+    {
+      "id": "C02",
+      "family": "conformite",
+      "dimension": "consentement",
+      "title": "Audience de campagne : consentement présent",
+      "reference": "RGPD art. 6-1-a et 7",
+      "table": "campaign_audience",
+      "checked": 1250,
+      "failed": 55,
+      "rate": 0.956,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "U0000146",
+        "U0000159",
+        "U0000239"
+      ]
+    },
+    {
+      "id": "C03",
+      "family": "conformite",
+      "dimension": "minimisation",
+      "title": "Audience pseudonymisée (SHA-256)",
+      "reference": "Politique, principe 6",
+      "table": "campaign_audience",
+      "checked": 1250,
+      "failed": 29,
+      "rate": 0.9768,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "U0000601",
+        "U0000762",
+        "U0000921"
+      ]
+    },
+    {
+      "id": "C04",
+      "family": "conformite",
+      "dimension": "minimisation",
+      "title": "Événements dans la durée de conservation (24 mois)",
+      "reference": "Politique, principe 6",
+      "table": "events",
+      "checked": 50148,
+      "failed": 483,
+      "rate": 0.9903685092127303,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "E000000233",
+        "E000000255",
+        "E000000261"
+      ]
+    },
+    {
+      "id": "C05",
+      "family": "conformite",
+      "dimension": "droits",
+      "title": "Demandes DSAR dans les délais (RGPD 30 j, CCPA 45 j)",
+      "reference": "Politique, principe 7",
+      "table": "dsar_requests",
+      "checked": 114,
+      "failed": 4,
+      "rate": 0.9649122807017544,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "DSAR-0007",
+        "DSAR-0041",
+        "DSAR-0088"
+      ]
+    },
+    {
+      "id": "C06",
+      "family": "conformite",
+      "dimension": "violations",
+      "title": "Violation notifiée sous 72 h",
+      "reference": "RGPD art. 33",
+      "table": "security_incidents",
+      "checked": 5,
+      "failed": 2,
+      "rate": 0.6,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "INC-003",
+        "INC-006"
+      ]
+    },
+    {
+      "id": "K01",
+      "family": "catalogue",
+      "dimension": "responsabilite",
+      "title": "Chaque table a un responsable, une classification, une base légale et une rétention",
+      "reference": "Politique, principe 1 et §3",
+      "table": "catalogue",
+      "checked": 6,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "K02",
+      "family": "catalogue",
+      "dimension": "minimisation",
+      "title": "Aucune colonne physique hors catalogue",
+      "reference": "Politique, principe 6",
+      "table": "catalogue",
+      "checked": 36,
+      "failed": 1,
+      "rate": 0.9722222222222222,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "users.phone_number"
+      ]
+    },
+    {
+      "id": "K03",
+      "family": "catalogue",
+      "dimension": "classification",
+      "title": "Donnée personnelle classée au moins « confidentiel »",
+      "reference": "Politique, §3",
+      "table": "catalogue",
+      "checked": 35,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "K04",
+      "family": "catalogue",
+      "dimension": "documentation",
+      "title": "Le catalogue ne décrit pas de colonne disparue",
+      "reference": "Politique, principe 8",
+      "table": "catalogue",
+      "checked": 35,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    }
+  ],
+  "controles_apres": [
+    {
+      "id": "Q01",
+      "family": "qualite",
+      "dimension": "completude",
+      "title": "Pays renseigné",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 174,
+      "rate": 0.9652000000000001,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "U0000025",
+        "U0000031",
+        "U0000044"
+      ]
+    },
+    {
+      "id": "Q02",
+      "family": "qualite",
+      "dimension": "completude",
+      "title": "Année de naissance renseignée",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 413,
+      "rate": 0.9174,
+      "threshold": 0.95,
+      "passed": false,
+      "sample": [
+        "U0000002",
+        "U0000009",
+        "U0000064"
+      ]
+    },
+    {
+      "id": "Q03",
+      "family": "qualite",
+      "dimension": "completude",
+      "title": "Consentement marketing renseigné",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "Q04",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "E-mail au bon format",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 79,
+      "rate": 0.9842,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "U0000011",
+        "U0000028",
+        "U0000166"
+      ]
+    },
+    {
+      "id": "Q05",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "Pays dans le référentiel ISO",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 4826,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "Q06",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "Durée d'écoute positive",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 48762,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "Q07",
+      "family": "qualite",
+      "dimension": "exactitude",
+      "title": "Événement non daté dans le futur",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 48762,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "Q08",
+      "family": "qualite",
+      "dimension": "coherence",
+      "title": "Événement rattaché à un utilisateur connu",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 48762,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "Q09",
+      "family": "qualite",
+      "dimension": "coherence",
+      "title": "Identifiant d'événement unique",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 48762,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "Q10",
+      "family": "qualite",
+      "dimension": "tracabilite",
+      "title": "Lignage des événements (source, ingestion)",
+      "reference": "Politique, principe 4",
+      "table": "events",
+      "checked": 48762,
+      "failed": 239,
+      "rate": 0.9950986423854641,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": [
+        "E000000569",
+        "E000000918",
+        "E000001096"
+      ]
+    },
+    {
+      "id": "Q11",
+      "family": "qualite",
+      "dimension": "tracabilite",
+      "title": "Lignage des profils (source, ingestion)",
+      "reference": "Politique, principe 4",
+      "table": "users",
+      "checked": 5000,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 0.95,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "C01",
+      "family": "conformite",
+      "dimension": "consentement",
+      "title": "Consentement tracé (horodatage + canal)",
+      "reference": "Plan, KPI pilote « 100 % »",
+      "table": "users",
+      "checked": 3076,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "C02",
+      "family": "conformite",
+      "dimension": "consentement",
+      "title": "Audience de campagne : consentement présent",
+      "reference": "RGPD art. 6-1-a et 7",
+      "table": "campaign_audience",
+      "checked": 1195,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "C03",
+      "family": "conformite",
+      "dimension": "minimisation",
+      "title": "Audience pseudonymisée (SHA-256)",
+      "reference": "Politique, principe 6",
+      "table": "campaign_audience",
+      "checked": 1195,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "C04",
+      "family": "conformite",
+      "dimension": "minimisation",
+      "title": "Événements dans la durée de conservation (24 mois)",
+      "reference": "Politique, principe 6",
+      "table": "events",
+      "checked": 48762,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "C05",
+      "family": "conformite",
+      "dimension": "droits",
+      "title": "Demandes DSAR dans les délais (RGPD 30 j, CCPA 45 j)",
+      "reference": "Politique, principe 7",
+      "table": "dsar_requests",
+      "checked": 114,
+      "failed": 4,
+      "rate": 0.9649122807017544,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "DSAR-0007",
+        "DSAR-0041",
+        "DSAR-0088"
+      ]
+    },
+    {
+      "id": "C06",
+      "family": "conformite",
+      "dimension": "violations",
+      "title": "Violation notifiée sous 72 h",
+      "reference": "RGPD art. 33",
+      "table": "security_incidents",
+      "checked": 5,
+      "failed": 2,
+      "rate": 0.6,
+      "threshold": 1.0,
+      "passed": false,
+      "sample": [
+        "INC-003",
+        "INC-006"
+      ]
+    },
+    {
+      "id": "K01",
+      "family": "catalogue",
+      "dimension": "responsabilite",
+      "title": "Chaque table a un responsable, une classification, une base légale et une rétention",
+      "reference": "Politique, principe 1 et §3",
+      "table": "catalogue",
+      "checked": 6,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "K02",
+      "family": "catalogue",
+      "dimension": "minimisation",
+      "title": "Aucune colonne physique hors catalogue",
+      "reference": "Politique, principe 6",
+      "table": "catalogue",
+      "checked": 35,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "K03",
+      "family": "catalogue",
+      "dimension": "classification",
+      "title": "Donnée personnelle classée au moins « confidentiel »",
+      "reference": "Politique, §3",
+      "table": "catalogue",
+      "checked": 35,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    },
+    {
+      "id": "K04",
+      "family": "catalogue",
+      "dimension": "documentation",
+      "title": "Le catalogue ne décrit pas de colonne disparue",
+      "reference": "Politique, principe 8",
+      "table": "catalogue",
+      "checked": 35,
+      "failed": 0,
+      "rate": 1.0,
+      "threshold": 1.0,
+      "passed": true,
+      "sample": []
+    }
+  ],
+  "audit_livrables": [
+    {
+      "id": "A01",
+      "sujet": "Notes de maturité par dimension",
+      "statut": "ecart",
+      "constat": "6 dimension(s) sur 9 ont une note différente entre le document d'évaluation et le graphique de la slide 3.",
+      "attendu": "notes du document 01 (§3.1 à 3.9) : 3 2 2 3 2 2 2 3 2",
+      "trouve": "graphique slide 3 : 2 2 3 2 2 3 2 2 4 — Data Governance 3→2 ; Data Architecture 2→3 ; Compliance 3→2 ; Data Security 2→3 ; Data Integration 3→2 ; Analytics & BI 2→4",
+      "source": "01_Evaluation_Maturite_Data.docx · 04_Presentation_Comite_Executif.pptx (slide 3)"
+    },
+    {
+      "id": "A02",
+      "sujet": "Moyenne de maturité",
+      "statut": "ecart",
+      "constat": "Le document calcule 2,33 (« environ 2,3 ») ; la présentation annonce 2,4 / 5, qui est la moyenne des notes du graphique (2,44).",
+      "attendu": "2,3 / 5 (moyenne des notes du document)",
+      "trouve": "2,4 / 5 (slides 2 et 3, README)",
+      "source": "01_Evaluation_Maturite_Data.docx · 04_Presentation_Comite_Executif.pptx"
+    },
+    {
+      "id": "B01",
+      "sujet": "Sous-total licences du pilote",
+      "statut": "ok",
+      "constat": "La somme des 7 postes donne 270–430 K$.",
+      "attendu": "270–430 K$",
+      "trouve": "270–430 K$",
+      "source": "03_Plan_Implementation_Gouvernance.docx (annexe A)"
+    },
+    {
+      "id": "B02",
+      "sujet": "Sous-total licences de la cible",
+      "statut": "ok",
+      "constat": "La somme des 7 postes donne 2,145–5,790 M$, arrondie à 2,1–5,8 M$.",
+      "attendu": "2,1–5,8 M$",
+      "trouve": "2,1–5,8 M$",
+      "source": "03_Plan_Implementation_Gouvernance.docx (annexe A)"
+    },
+    {
+      "id": "B03",
+      "sujet": "Services d'intégration « +30 à 50 % »",
+      "statut": "ecart",
+      "constat": "80–130 K$ correspond à 30 % des deux bornes (81–129 K$). Appliquer réellement 30 à 50 % donne 81–215 K$, soit un total pilote de 351–645 K$ au lieu de 350–560 K$.",
+      "attendu": "81–215 K$ (30 % de la borne basse, 50 % de la borne haute)",
+      "trouve": "80–130 K$",
+      "source": "03_Plan_Implementation_Gouvernance.docx (annexe A) · 04_Presentation_Comite_Executif.pptx (slides 12 à 14)"
+    },
+    {
+      "id": "B04",
+      "sujet": "Total indicatif du pilote",
+      "statut": "ok",
+      "constat": "Le total est bien la somme du sous-total licences et de la ligne intégration telle qu'écrite.",
+      "attendu": "350–560 K$",
+      "trouve": "350–560 K$",
+      "source": "03_Plan_Implementation_Gouvernance.docx (annexe A)"
+    },
+    {
+      "id": "C01",
+      "sujet": "Slide 5 : « 9 principes »",
+      "statut": "ok",
+      "constat": "La politique en contient 9.",
+      "attendu": "9",
+      "trouve": "9",
+      "source": "02c_Politique_Gouvernance_Donnees.docx · 04_Presentation_Comite_Executif.pptx (slide 5)"
+    },
+    {
+      "id": "C02",
+      "sujet": "Slide 5 : « 4 niveaux de classification »",
+      "statut": "ok",
+      "constat": "La politique en contient 4.",
+      "attendu": "4",
+      "trouve": "4",
+      "source": "02c_Politique_Gouvernance_Donnees.docx · 04_Presentation_Comite_Executif.pptx (slide 5)"
+    },
+    {
+      "id": "C03",
+      "sujet": "Slide 5 : « 7 KPIs de pilotage »",
+      "statut": "ok",
+      "constat": "La politique en contient 7.",
+      "attendu": "7",
+      "trouve": "7",
+      "source": "02c_Politique_Gouvernance_Donnees.docx · 04_Presentation_Comite_Executif.pptx (slide 5)"
+    },
+    {
+      "id": "C04",
+      "sujet": "Slide 5 : « 14 contrôles de conformité »",
+      "statut": "non_tracable",
+      "constat": "Aucune liste de 14 contrôles ni matrice de conformité dans le dépôt (matrice citée slide 14 : absente de la politique). La section 4 de la politique compte 13 rubriques (RGPD, CCPA, PCI-DSS).",
+      "attendu": "14 contrôles identifiables",
+      "trouve": "13 rubriques en §4",
+      "source": "02c_Politique_Gouvernance_Donnees.docx · 04_Presentation_Comite_Executif.pptx (slides 5 et 14)"
+    },
+    {
+      "id": "C05",
+      "sujet": "README : présentation de 14 slides",
+      "statut": "ok",
+      "constat": "La présentation compte 14 slides.",
+      "attendu": "14",
+      "trouve": "14",
+      "source": "04_Presentation_Comite_Executif.pptx"
+    },
+    {
+      "id": "D01",
+      "sujet": "Calendrier : 18 ou 24 mois ; bascule vers le CoE",
+      "statut": "a_harmoniser",
+      "constat": "Le plan termine le rollout à M18 (pilote + 3 vagues) ; la politique place la phase 3 sur 13 à 24 mois ; la politique bascule vers le CoE en phase 2 (7 à 12 mois), la slide 7 garde un modèle centralisé M0–M12. Les deux lectures se défendent (déploiement outillé vs trajectoire d'organisation), mais elles ne sont pas formulées pareil.",
+      "attendu": "un calendrier unique",
+      "trouve": "plan : fin M15 — M18 · politique : phase 3 13 à 24 mois · slide 7 : centralisé M0–M12",
+      "source": "02c_Politique_Gouvernance_Donnees.docx · 03_Plan_Implementation_Gouvernance.docx · 04_Presentation_Comite_Executif.pptx (slides 7 et 8)"
+    }
+  ]
+}

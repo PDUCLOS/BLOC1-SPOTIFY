@@ -1,0 +1,82 @@
+# Catalogue du périmètre pilote « Marketing / User Engagement Data ».
+# Il joue le rôle que tiendrait Collibra dans la cible : chaque jeu de données a un
+# responsable (Principe 1), une classification (§3 de la politique), une base légale
+# et une durée de conservation (Principe 6, minimisation).
+# Niveaux : public < interne < confidentiel < restreint.
+
+[datasets.users]
+description = "Profils des utilisateurs du périmètre pilote"
+steward = "Data Steward Marketing"
+classification = "confidentiel"
+legal_basis = "contrat"
+retention_months = 36
+columns.user_id = { classification = "interne", pii = false, description = "Identifiant pseudonyme" }
+columns.email = { classification = "confidentiel", pii = true, description = "Adresse e-mail" }
+columns.country = { classification = "interne", pii = false, critical = true, description = "Pays ISO 3166-1 alpha-2" }
+columns.birth_year = { classification = "confidentiel", pii = true, critical = true, description = "Année de naissance" }
+columns.signup_date = { classification = "interne", pii = false, description = "Date d'inscription" }
+columns.consent_marketing = { classification = "confidentiel", pii = false, critical = true, description = "Consentement marketing (RGPD art. 6-1-a)" }
+columns.consent_ts = { classification = "confidentiel", pii = false, description = "Horodatage du consentement" }
+columns.consent_source = { classification = "interne", pii = false, description = "Canal de recueil (CMP OneTrust dans la cible)" }
+columns.source_system = { classification = "interne", pii = false, description = "Lignage : système d'origine" }
+columns.ingested_at = { classification = "interne", pii = false, description = "Lignage : horodatage d'ingestion" }
+
+[datasets.events]
+description = "Événements d'écoute et d'interaction (User Engagement Data)"
+steward = "Data Steward Marketing"
+classification = "confidentiel"
+legal_basis = "interet_legitime"
+retention_months = 24
+columns.event_id = { classification = "interne", pii = false, description = "Identifiant d'événement" }
+columns.user_id = { classification = "interne", pii = false, critical = true, description = "Clé vers users" }
+columns.event_ts = { classification = "interne", pii = false, critical = true, description = "Horodatage de l'événement" }
+columns.event_type = { classification = "interne", pii = false, critical = true, description = "play, skip, like, add_playlist" }
+columns.track_id = { classification = "public", pii = false, description = "Titre du catalogue musical" }
+columns.ms_played = { classification = "interne", pii = false, description = "Durée d'écoute en millisecondes" }
+columns.source_system = { classification = "interne", pii = false, description = "Lignage : système d'origine" }
+columns.ingested_at = { classification = "interne", pii = false, description = "Lignage : horodatage d'ingestion" }
+
+[datasets.campaign_audience]
+description = "Audience exportée vers l'outil d'activation marketing"
+steward = "Data Steward Marketing"
+classification = "confidentiel"
+legal_basis = "consentement"
+retention_months = 6
+columns.user_id = { classification = "interne", pii = false, critical = true, description = "Clé vers users" }
+columns.campaign_id = { classification = "interne", pii = false, description = "Campagne" }
+columns.email_sha256 = { classification = "confidentiel", pii = true, description = "E-mail pseudonymisé (SHA-256 hexadécimal attendu)" }
+columns.exported_at = { classification = "interne", pii = false, description = "Date d'export" }
+
+[datasets.subscriptions]
+description = "Abonnements Premium — source de référence pour l'enrichissement du pays"
+steward = "Data Steward Finance"
+classification = "confidentiel"
+legal_basis = "contrat"
+retention_months = 120
+columns.user_id = { classification = "interne", pii = false, description = "Clé vers users" }
+columns.plan = { classification = "interne", pii = false, description = "Formule" }
+columns.billing_country = { classification = "confidentiel", pii = false, description = "Pays de facturation" }
+
+[datasets.dsar_requests]
+description = "Demandes d'exercice des droits (accès, effacement, opposition)"
+steward = "Data Protection Officer"
+classification = "confidentiel"
+legal_basis = "obligation_legale"
+retention_months = 60
+columns.request_id = { classification = "interne", pii = false, description = "Identifiant de demande" }
+columns.user_id = { classification = "interne", pii = false, description = "Demandeur" }
+columns.regime = { classification = "interne", pii = false, description = "RGPD ou CCPA" }
+columns.request_type = { classification = "interne", pii = false, description = "acces, effacement, opposition, portabilite" }
+columns.received_at = { classification = "interne", pii = false, description = "Réception" }
+columns.closed_at = { classification = "interne", pii = false, description = "Clôture (vide si en cours)" }
+
+[datasets.security_incidents]
+description = "Registre des violations de données (RGPD art. 33)"
+steward = "Engineering / RSSI"
+classification = "restreint"
+legal_basis = "obligation_legale"
+retention_months = 60
+columns.incident_id = { classification = "restreint", pii = false, description = "Identifiant" }
+columns.personal_data = { classification = "restreint", pii = false, description = "Données personnelles concernées" }
+columns.detected_at = { classification = "restreint", pii = false, description = "Détection" }
+columns.notified_at = { classification = "restreint", pii = false, description = "Notification à l'autorité (vide si non notifiée)" }
